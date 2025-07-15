@@ -64,7 +64,8 @@ async def do_login_stage_one(hass: HomeAssistant) -> tuple:
 
         # Load the "Login with QR-Code"-page
         async with session.get(URL_QR_CODE_SIGNIN) as res:
-            if res.status != 200:
+            # For some reason, Samsung is returning a 404 status code even though it is successful.
+            if res.status not in [200, 404]:
                 _LOGGER.error(
                     f"QR code URL request failed with status {res.status}, Response: {text[:250]}...")
                 return None
